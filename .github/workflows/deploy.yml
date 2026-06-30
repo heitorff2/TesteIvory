@@ -1,4 +1,4 @@
-name: CI-CD Site Statico
+name: CI-CD Site Statico 
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
           ls
 
 
-  sonar:
+  sonar: 
 
     name: Analise SonarCloud
     needs: build
