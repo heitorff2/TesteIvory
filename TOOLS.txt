@@ -1,0 +1,13 @@
+# Meu Site Estático
+
+Projeto desenvolvido para a atividade DevOps.
+
+Tecnologias:
+- HTML
+- CSS
+- JavaScript
+
+Ferramentas:
+- GitHub
+- SonarCloud
+- AWS
