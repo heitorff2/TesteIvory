@@ -1,0 +1,56 @@
+name: CI-CD Site Statico 
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+
+  build:
+
+    name: Build do projeto
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Baixar codigo
+        uses: actions/checkout@v4
+
+
+      - name: Verificar arquivos
+        run: |
+          echo "Arquivos:"
+          ls
+
+
+  sonar: 
+
+    name: Analise SonarCloud
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+
+      - name: SonarCloud
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+
+  deploy:
+
+    name: Deploy
+    needs: sonar
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Deploy site
+        run: |
+          echo "Deploy realizado"
