@@ -1,56 +1,82 @@
-name: CI-CD Site Statico 
+name: CI-CD Site Statico
+
 
 on:
+
   push:
+
     branches:
+
       - main
+
 
 
 jobs:
 
-  build:
 
-    name: Build do projeto
-    runs-on: ubuntu-latest
+ build:
 
-    steps:
+  runs-on: ubuntu-latest
 
-      - name: Baixar codigo
-        uses: actions/checkout@v4
+  steps:
 
+  - uses: actions/checkout@v4
 
-      - name: Verificar arquivos
-        run: |
-          echo "Arquivos:"
-          ls
+  - name: Build
+    run: echo "Build concluído"
 
 
-  sonar: 
 
-    name: Analise SonarCloud
-    needs: build
-    runs-on: ubuntu-latest
+ sonar:
 
-    steps:
+  needs: build
 
-      - name: Checkout
-        uses: actions/checkout@v4
+  runs-on: ubuntu-latest
 
+  steps:
 
-      - name: SonarCloud
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  - uses: actions/checkout@v4
+    with:
+      fetch-depth: 0
 
 
-  deploy:
+  - name: SonarCloud
+    uses: SonarSource/sonarcloud-github-action@master
 
-    name: Deploy
-    needs: sonar
-    runs-on: ubuntu-latest
+    env:
 
-    steps:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Deploy site
-        run: |
-          echo "Deploy realizado"
+
+
+ deploy:
+
+  needs: sonar
+
+  runs-on: ubuntu-latest
+
+
+  steps:
+
+  - uses: actions/checkout@v4
+
+
+  - name: Deploy AWS
+
+    uses: jakejarvis/s3-sync-action@master
+
+    with:
+
+      args: --delete
+
+    env:
+
+      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+
+      SOURCE_DIR: .
