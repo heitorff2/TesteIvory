@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "Heitor",
+        "projectKey": "SEU_PROJECT_KEY"
+    }
+}
